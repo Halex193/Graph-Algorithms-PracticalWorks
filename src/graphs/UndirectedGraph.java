@@ -18,6 +18,12 @@ public class UndirectedGraph implements Graph
     }
 
     @Override
+    public int getNumberOfVertices()
+    {
+        return 0;
+    }
+
+    @Override
     public int getNumberOfEdges()
     {
         return 0;

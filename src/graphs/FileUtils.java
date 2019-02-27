@@ -1,12 +1,19 @@
 package graphs;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class FileUtils
 {
-    public static DirectedGraph createDirectedGraphFromFile(String fileName)
+    public static DirectedGraph createDirectedGraphFromFile(String fileName) throws FileNotFoundException
     {
-        Scanner scanner = new Scanner(fileName);
+        File file = new File(fileName);
+        if (!file.exists())
+        {
+            throw new FileNotFoundException();
+        }
+        Scanner scanner = new Scanner(file);
         int vertexNumber = scanner.nextInt();
         int edgeNumber = scanner.nextInt();
         DirectedGraph directedGraph = new DirectedGraph(vertexNumber, edgeNumber);

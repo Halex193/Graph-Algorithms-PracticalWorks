@@ -35,6 +35,18 @@ public class DirectedGraph implements Graph
         }
     }
 
+    @Override
+    public int getNumberOfVertices()
+    {
+        return inEdges.size();
+    }
+
+    @Override
+    public int getNumberOfEdges()
+    {
+        return edges.size();
+    }
+
     public int inDegree(int vertex)
     {
         if (!existsVertex(vertex))
@@ -63,12 +75,6 @@ public class DirectedGraph implements Graph
     public Iterator<Integer> parseOutboundEdges(int vertex)
     {
         return outEdges.get(vertex).iterator();
-    }
-
-    @Override
-    public int getNumberOfEdges()
-    {
-        return edges.size();
     }
 
     @Override
@@ -198,5 +204,4 @@ public class DirectedGraph implements Graph
         }
         return newGraph;
     }
-
 }
