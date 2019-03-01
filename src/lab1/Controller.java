@@ -2,7 +2,6 @@ package lab1;
 
 import graphs.DirectedGraph;
 
-import java.util.Iterator;
 import java.util.StringJoiner;
 
 public class Controller
@@ -47,23 +46,17 @@ public class Controller
 
     public String getOutEdges(int vertex)
     {
-        Iterator<Integer> iterator = directedGraph.parseOutboundEdges(vertex);
+        Iterable<Integer> edgeSet = directedGraph.parseOutboundEdges(vertex);
         StringJoiner stringJoiner = new StringJoiner(", ");
-        while (iterator.hasNext())
-        {
-            stringJoiner.add(vertex + "-" + iterator.next());
-        }
+        edgeSet.forEach((vertex2) -> stringJoiner.add(vertex + "-" + vertex2));
         return stringJoiner.toString();
     }
 
     public String getInEdges(int vertex)
     {
-        Iterator<Integer> iterator = directedGraph.parseInboundEdges(vertex);
+        Iterable<Integer> edgeSet = directedGraph.parseInboundEdges(vertex);
         StringJoiner stringJoiner = new StringJoiner(", ");
-        while (iterator.hasNext())
-        {
-            stringJoiner.add(iterator.next() + "-" + vertex);
-        }
+        edgeSet.forEach((vertex1) -> stringJoiner.add(vertex1 + "-" + vertex));
         return stringJoiner.toString();
     }
 
@@ -79,18 +72,14 @@ public class Controller
 
     public String existsEdge(int vertex1, int vertex2)
     {
-
         return String.valueOf(directedGraph.existsEdge(vertex1, vertex2));
     }
 
     public String getVertices()
     {
-        Iterator<Integer> iterator = directedGraph.parseVertices();
+        Iterable<Integer> vertexSet = directedGraph.parseVertices();
         StringJoiner stringJoiner = new StringJoiner(", ");
-        while (iterator.hasNext())
-        {
-            stringJoiner.add(iterator.next().toString());
-        }
+        vertexSet.forEach((vertex) -> stringJoiner.add(vertex.toString()));
         return stringJoiner.toString();
     }
 

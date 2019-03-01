@@ -30,7 +30,7 @@ public class UndirectedGraph implements Graph
     }
 
     @Override
-    public Iterator<Integer> parseVertices()
+    public Iterable<Integer> parseVertices()
     {
         return null;
     }

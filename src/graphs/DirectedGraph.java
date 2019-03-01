@@ -67,20 +67,20 @@ public class DirectedGraph implements Graph
         return outEdges.get(vertex).size();
     }
 
-    public Iterator<Integer> parseInboundEdges(int vertex)
+    public Iterable<Integer> parseInboundEdges(int vertex)
     {
-        return inEdges.get(vertex).iterator();
+        return Collections.unmodifiableList(inEdges.get(vertex));
     }
 
-    public Iterator<Integer> parseOutboundEdges(int vertex)
+    public Iterable<Integer> parseOutboundEdges(int vertex)
     {
-        return outEdges.get(vertex).iterator();
+        return Collections.unmodifiableList(outEdges.get(vertex));
     }
 
     @Override
-    public Iterator<Integer> parseVertices()
+    public Iterable<Integer> parseVertices()
     {
-        return inEdges.keySet().iterator();
+        return Collections.unmodifiableSet(inEdges.keySet());
     }
 
     @Override

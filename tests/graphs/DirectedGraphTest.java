@@ -54,7 +54,7 @@ public class DirectedGraphTest
     @Test
     public void parseInboundEdges()
     {
-        Iterator<Integer> iterator = graph.parseInboundEdges(3);
+        Iterator<Integer> iterator = graph.parseInboundEdges(3).iterator();
         assertEquals((int)iterator.next(), 1);
         assertEquals((int)iterator.next(), 2);
     }
@@ -62,7 +62,7 @@ public class DirectedGraphTest
     @Test
     public void parseOutboundEdges()
     {
-        Iterator<Integer> iterator = graph.parseOutboundEdges(2);
+        Iterator<Integer> iterator = graph.parseOutboundEdges(2).iterator();
         assertEquals((int)iterator.next(), 1);
         assertEquals((int)iterator.next(), 3);
     }
@@ -78,7 +78,7 @@ public class DirectedGraphTest
     @Test
     public void parseVertices()
     {
-        Iterator<Integer> iterator = graph.parseVertices();
+        Iterator<Integer> iterator = graph.parseVertices().iterator();
         int i = 0;
         while (iterator.hasNext())
         {

@@ -1,7 +1,5 @@
 package graphs;
 
-import java.util.Iterator;
-
 public interface Graph
 {
 
@@ -9,7 +7,7 @@ public interface Graph
 
     int getNumberOfEdges();
 
-    Iterator<Integer> parseVertices();
+    Iterable<Integer> parseVertices();
 
     boolean existsEdge(int vertex1, int vertex2);
 
