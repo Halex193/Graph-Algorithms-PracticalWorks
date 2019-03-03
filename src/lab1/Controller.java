@@ -1,10 +1,12 @@
 package lab1;
 
 import graphs.DirectedGraph;
+import graphs.VertexPair;
+import graphs.utils.GraphUtils;
 
 import java.util.StringJoiner;
 
-public class Controller
+class Controller
 {
 
     private DirectedGraph directedGraph;
@@ -86,5 +88,21 @@ public class Controller
     public String getNumberOfVertices()
     {
         return String.valueOf(directedGraph.getNumberOfVertices());
+    }
+
+    public void generateRandomGraph(int vertexNumber, int edgeNumber)
+    {
+        this.directedGraph = GraphUtils.createRandomDirectedGraph(vertexNumber, edgeNumber);
+    }
+
+    public String getEdges()
+    {
+        Iterable<VertexPair> edgeSet = directedGraph.parseEdges();
+        StringJoiner stringJoiner = new StringJoiner(", ");
+        for (VertexPair edge : edgeSet)
+        {
+            stringJoiner.add(String.format("%d - %d", edge.getVertex1(), edge.getVertex2()));
+        }
+        return stringJoiner.toString();
     }
 }

@@ -8,7 +8,7 @@ import graphs.exceptions.VertexDoesNotExistException;
 import java.util.*;
 
 /**
- * Models a directed Graph data structure
+ * Models a directed graph data structure
  */
 public class DirectedGraph implements Graph
 {
@@ -188,6 +188,12 @@ public class DirectedGraph implements Graph
         inEdges.get(vertex2).remove(Integer.valueOf(vertex1));
         outEdges.get(vertex1).remove(Integer.valueOf(vertex2));
         edges.remove(new VertexPair(vertex1, vertex2));
+    }
+
+    @Override
+    public Iterable<VertexPair> parseEdges()
+    {
+        return Collections.unmodifiableSet(edges.keySet());
     }
 
     @Override

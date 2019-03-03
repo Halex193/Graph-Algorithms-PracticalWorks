@@ -3,7 +3,7 @@ package graphs;
 import java.util.Iterator;
 
 /**
- * Incomplete
+ * Models an undirected Graph data structure
  */
 public class UndirectedGraph implements Graph
 {
@@ -75,6 +75,12 @@ public class UndirectedGraph implements Graph
     public void removeEdge(int vertex1, int vertex2)
     {
 
+    }
+
+    @Override
+    public Iterable<VertexPair> parseEdges()
+    {
+        return null;
     }
 
     @Override

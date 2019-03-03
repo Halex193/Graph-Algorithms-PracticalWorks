@@ -1,4 +1,6 @@
-package graphs;
+package graphs.utils;
+
+import graphs.DirectedGraph;
 
 import java.io.File;
 import java.io.FileNotFoundException;

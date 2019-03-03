@@ -1,11 +1,11 @@
 package lab1;
 
 import graphs.DirectedGraph;
-import graphs.FileUtils;
+import graphs.utils.FileUtils;
 
 import java.io.FileNotFoundException;
 
-public class Main
+class Main
 {
     private static final String fileName = "data/graph.txt";
 
