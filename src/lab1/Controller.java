@@ -105,4 +105,17 @@ class Controller
         }
         return stringJoiner.toString();
     }
+
+    public String isolatedVertices()
+    {
+        StringJoiner stringJoiner = new StringJoiner(", ");
+        for (int vertex : directedGraph.parseVertices())
+        {
+            if (directedGraph.inDegree(vertex) == 0 && directedGraph.outDegree(vertex) == 0)
+            {
+                stringJoiner.add(String.valueOf(vertex));
+            }
+        }
+        return stringJoiner.toString();
+    }
 }

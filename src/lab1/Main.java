@@ -7,11 +7,11 @@ import java.io.FileNotFoundException;
 
 class Main
 {
-    private static final String fileName = "data/graph.txt";
+    private static final String fileName = "data/graph1k.txt";
 
     public static void main(String[] args)
     {
-        DirectedGraph directedGraph = null;
+        DirectedGraph directedGraph;
         try
         {
             directedGraph = FileUtils.createDirectedGraphFromFile(fileName);

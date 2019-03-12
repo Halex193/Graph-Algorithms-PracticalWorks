@@ -38,7 +38,13 @@ class ConsoleUI
         options.put(13, new Option("Remove vertex", this::removeVertex));
         options.put(14, new Option("Generate random graph", this::generateRandomGraph));
         options.put(15, new Option("Get edges", this::getEdges));
+        options.put(16, new Option("List isolated vertices", this::isolatedVertices));
 
+    }
+
+    private void isolatedVertices()
+    {
+        System.out.println(controller.isolatedVertices());
     }
 
     public void run()
