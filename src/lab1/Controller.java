@@ -2,8 +2,10 @@ package lab1;
 
 import graphs.DirectedGraph;
 import graphs.VertexPair;
+import graphs.utils.FileUtils;
 import graphs.utils.GraphUtils;
 
+import java.io.IOException;
 import java.util.StringJoiner;
 
 class Controller
@@ -117,5 +119,17 @@ class Controller
             }
         }
         return stringJoiner.toString();
+    }
+
+    public String writeGraphToFile(String fileName)
+    {
+        try
+        {
+            FileUtils.writeDirectedGraphToFile(directedGraph, fileName);
+            return "The graph was written to the file\n";
+        } catch (IOException e)
+        {
+            return "File cannot be written to\n";
+        }
     }
 }

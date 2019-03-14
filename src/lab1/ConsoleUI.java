@@ -39,12 +39,20 @@ class ConsoleUI
         options.put(14, new Option("Generate random graph", this::generateRandomGraph));
         options.put(15, new Option("Get edges", this::getEdges));
         options.put(16, new Option("List isolated vertices", this::isolatedVertices));
+        options.put(17, new Option("Write graph to file", this::writeGraphToFile));
 
+    }
+
+    private void writeGraphToFile()
+    {
+        print("Choose file name: ");
+        String fileName = scanner.next();
+        print(controller.writeGraphToFile(fileName));
     }
 
     private void isolatedVertices()
     {
-        System.out.println(controller.isolatedVertices());
+        print(controller.isolatedVertices());
     }
 
     public void run()

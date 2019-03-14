@@ -1,9 +1,10 @@
 package graphs.utils;
 
 import graphs.DirectedGraph;
+import graphs.VertexPair;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 public class FileUtils
@@ -26,6 +27,20 @@ public class FileUtils
             int cost = scanner.nextInt();
             directedGraph.addEdge(vertex1, vertex2, cost);
         }
+        scanner.close();
         return directedGraph;
+    }
+
+    public static void writeDirectedGraphToFile(DirectedGraph directedGraph, String fileName) throws IOException
+    {
+        FileWriter fileWriter = new FileWriter(fileName);
+        PrintWriter writer = new PrintWriter(fileWriter);
+        writer.printf("%d %d\n", directedGraph.getNumberOfVertices(), directedGraph.getNumberOfEdges());
+        for (VertexPair edge : directedGraph.parseEdges())
+        {
+            int cost = directedGraph.getCost(edge.getVertex1(), edge.getVertex2());
+            writer.printf("%d %d %d\n", edge.getVertex1(), edge.getVertex2(), cost);
+        }
+        writer.close();
     }
 }
