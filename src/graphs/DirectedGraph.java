@@ -12,8 +12,17 @@ import java.util.*;
  */
 public class DirectedGraph implements Graph
 {
+    /**
+     * Maps the vertices to a list of their inbound edges
+     */
     protected Map<Integer, List<Integer>> inEdges;
+    /**
+     * Maps the vertices to a list of their outbound edges
+     */
     protected Map<Integer, List<Integer>> outEdges;
+    /**
+     * Maps the edges to their associated cost
+     */
     protected Map<VertexPair, Integer> edges;
 
     /**
