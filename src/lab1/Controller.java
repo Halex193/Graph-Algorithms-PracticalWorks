@@ -74,9 +74,9 @@ class Controller
         return String.valueOf(directedGraph.inDegree(vertex));
     }
 
-    public String existsEdge(int vertex1, int vertex2)
+    public boolean existsEdge(int vertex1, int vertex2)
     {
-        return String.valueOf(directedGraph.existsEdge(vertex1, vertex2));
+        return directedGraph.existsEdge(vertex1, vertex2);
     }
 
     public String getVertices()

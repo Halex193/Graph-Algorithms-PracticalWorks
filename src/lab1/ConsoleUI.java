@@ -193,7 +193,7 @@ class ConsoleUI
     {
         int vertex1 = getInt("Choose vertex 1: ");
         int vertex2 = getInt("Choose vertex 2: ");
-        print(controller.existsEdge(vertex1, vertex2));
+        print(controller.existsEdge(vertex1, vertex2) ? "The edge exists\n" : "The edge does not exist\n");
     }
 
     private void listVertices()

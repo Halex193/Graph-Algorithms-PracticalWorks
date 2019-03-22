@@ -172,7 +172,7 @@ public class DirectedGraph implements Graph
      * Change the cost of the specified edge
      * @param vertex1 The vertex from where the edge starts
      * @param vertex2 The vertex where the edge ends
-     * @param newCost THe new cost of the edge
+     * @param newCost The new cost of the edge
      */
     @Override
     public void changeCost(int vertex1, int vertex2, int newCost)

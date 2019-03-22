@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class VertexPair
 {
-    private final Integer vertex1;
-    private final Integer vertex2;
+    protected Integer vertex1;
+    protected Integer vertex2;
 
     public VertexPair(Integer vertex1, Integer vertex2)
     {
