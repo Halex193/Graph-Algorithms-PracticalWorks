@@ -8,17 +8,15 @@ import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
-public class DirectedGraphTest
+public class UndirectedGraphTest
 {
-    private DirectedGraph graph;
+    private UndirectedGraph graph;
     @Before
     public void setUp() throws Exception
     {
-        graph = new DirectedGraph(5, 6);
-        graph.addEdge(0,0,1);
+        graph = new UndirectedGraph(5, 6);
         graph.addEdge(0,1,7);
         graph.addEdge(1,2,2);
-        graph.addEdge(2,1,-1);
         graph.addEdge(1,3,8);
         graph.addEdge(2,3,5);
     }
@@ -32,35 +30,21 @@ public class DirectedGraphTest
     @Test
     public void inDegree()
     {
-        assertEquals(graph.inDegree(0), 1);
-        assertEquals(graph.inDegree(1), 2);
-        assertEquals(graph.inDegree(2), 1);
-        assertEquals(graph.inDegree(3), 2);
-        assertEquals(graph.inDegree(4), 0);
+        assertEquals(graph.degree(0), 1);
+        assertEquals(graph.degree(1), 3);
+        assertEquals(graph.degree(2), 2);
+        assertEquals(graph.degree(3), 2);
+        assertEquals(graph.degree(4), 0);
     }
 
     @Test
-    public void outDegree()
+    public void parseAdjacentEdges()
     {
-        assertEquals(graph.outDegree(0), 2);
-        assertEquals(graph.outDegree(1), 2);
-        assertEquals(graph.outDegree(2), 2);
-        assertEquals(graph.outDegree(3), 0);
-        assertEquals(graph.outDegree(4), 0);
-    }
-
-    @Test
-    public void parseInboundEdges()
-    {
-        Iterator<Integer> iterator = graph.parseInboundEdges(3).iterator();
+        Iterator<Integer> iterator = graph.parseAdjacentEdges(3).iterator();
         assertEquals((int)iterator.next(), 1);
         assertEquals((int)iterator.next(), 2);
-    }
 
-    @Test
-    public void parseOutboundEdges()
-    {
-        Iterator<Integer> iterator = graph.parseOutboundEdges(2).iterator();
+        iterator = graph.parseAdjacentEdges(2).iterator();
         assertEquals((int)iterator.next(), 1);
         assertEquals((int)iterator.next(), 3);
     }
@@ -68,9 +52,9 @@ public class DirectedGraphTest
     @Test
     public void getNumberOfEdges()
     {
-        assertEquals(graph.getNumberOfEdges(), 6);
+        assertEquals(graph.getNumberOfEdges(), 4);
         graph.addEdge(0, 4, 5);
-        assertEquals(graph.getNumberOfEdges(), 7);
+        assertEquals(graph.getNumberOfEdges(), 5);
     }
 
     @Test
@@ -95,7 +79,7 @@ public class DirectedGraphTest
     @Test
     public void getCost()
     {
-        assertEquals(graph.getCost(2, 1), -1);
+        assertEquals(graph.getCost(2, 1), 2);
     }
 
     @Test
@@ -136,10 +120,10 @@ public class DirectedGraphTest
     @Test
     public void addEdge()
     {
-        assertEquals(graph.getNumberOfEdges(), 6);
+        assertEquals(graph.getNumberOfEdges(), 4);
         graph.addEdge(0, 4, 5);
-        assertEquals(graph.getNumberOfEdges(), 7);
-        assertEquals(graph.inDegree(4), 1);
+        assertEquals(graph.getNumberOfEdges(), 5);
+        assertEquals(graph.degree(4), 1);
     }
 
     @Test
@@ -147,13 +131,13 @@ public class DirectedGraphTest
     {
         graph.removeEdge(0,1);
         assertFalse(graph.existsEdge(0,1));
-        assertEquals(graph.outDegree(0), 1);
+        assertEquals(graph.degree(0), 0);
     }
 
     @Test
     public void copy()
     {
-        DirectedGraph newGraph = graph.copy();
-        assertEquals(newGraph.getNumberOfEdges(), 6);
+        UndirectedGraph newGraph = graph.copy();
+        assertEquals(newGraph.getNumberOfEdges(), 4);
     }
 }

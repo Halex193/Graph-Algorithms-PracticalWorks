@@ -1,6 +1,7 @@
 package graphs.utils;
 
 import graphs.DirectedGraph;
+import graphs.UndirectedGraph;
 import graphs.VertexPair;
 
 import java.io.*;
@@ -42,5 +43,10 @@ public class FileUtils
             writer.printf("%d %d %d\n", edge.getVertex1(), edge.getVertex2(), cost);
         }
         writer.close();
+    }
+
+    public static UndirectedGraph createUndirectedGraphFromFile(String fileName) throws FileNotFoundException
+    {
+        return null;
     }
 }
