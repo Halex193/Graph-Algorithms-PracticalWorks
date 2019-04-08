@@ -301,7 +301,7 @@ public class DirectedGraph implements Graph
 
     /**
      * Returns a copy of the graph
-     * @return The copy as a new DirectedGraph object
+     * @return The copy as a new directedGraph object
      */
     @Override
     public DirectedGraph copy()

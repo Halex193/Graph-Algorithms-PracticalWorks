@@ -1,26 +1,26 @@
-package lab1;
+package undirectedGraph;
 
-import graphs.DirectedGraph;
+import graphs.UndirectedGraph;
 import graphs.utils.FileUtils;
 
 import java.io.FileNotFoundException;
 
 class Main
 {
-    private static final String fileName = "data/graph1k.txt";
+    private static final String fileName = "data/undirectedGraph.txt";
 
     public static void main(String[] args)
     {
-        DirectedGraph directedGraph;
+        UndirectedGraph undirectedGraph;
         try
         {
-            directedGraph = FileUtils.createDirectedGraphFromFile(fileName);
+            undirectedGraph = FileUtils.createUndirectedGraphFromFile(fileName);
         } catch (FileNotFoundException e)
         {
             System.out.println(String.format("File \"%s\" was not found", fileName));
-            directedGraph = new DirectedGraph();
+            undirectedGraph = new UndirectedGraph();
         }
-        Controller controller = new Controller(directedGraph);
+        Controller controller = new Controller(undirectedGraph);
         ConsoleUI consoleUI = new ConsoleUI(controller);
         consoleUI.run();
     }

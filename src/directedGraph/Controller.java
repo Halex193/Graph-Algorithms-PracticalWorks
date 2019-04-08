@@ -1,4 +1,4 @@
-package lab1;
+package directedGraph;
 
 import graphs.DirectedGraph;
 import graphs.VertexPair;

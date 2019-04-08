@@ -1,4 +1,4 @@
-package lab2;
+package undirectedGraph;
 
 import graphs.exceptions.EdgeAlreadyExistsException;
 import graphs.exceptions.EdgeDoesNotExistException;
@@ -25,24 +25,24 @@ class ConsoleUI
     private void createOptionList()
     {
         options = new HashMap<>(16);
-//        options.put(1, new Option("Number of vertices", this::numberOfVertices));
-//        options.put(2, new Option("List vertices", this::listVertices));
-//        options.put(3, new Option("Check if edge exists", this::edgeExists));
-//        options.put(4, new Option("Get in degree", this::getInDegree));
-//        options.put(5, new Option("Get out degree", this::getOutDegree));
-//        options.put(6, new Option("Get inbound edges", this::inboundEdges));
-//        options.put(7, new Option("Get outbound edges", this::outboundEdges));
-//        options.put(8, new Option("Get edge cost", this::getEdgeCost));
-//        options.put(9, new Option("Set edge cost", this::setEdgeCost));
-//        options.put(10, new Option("Add edge", this::addEdge));
-//        options.put(11, new Option("Remove edge", this::removeEdge));
-//        options.put(12, new Option("Add vertex", this::addVertex));
-//        options.put(13, new Option("Remove vertex", this::removeVertex));
-//        options.put(14, new Option("Generate random graph", this::generateRandomGraph));
-//        options.put(15, new Option("Get edges", this::getEdges));
-//        options.put(16, new Option("List isolated vertices", this::isolatedVertices));
-//        options.put(17, new Option("Write graph to file", this::writeGraphToFile));
+        options.put(1, new Option("Number of vertices", this::numberOfVertices));
+        options.put(2, new Option("List vertices", this::listVertices));
+        options.put(3, new Option("Check if edge exists", this::edgeExists));
+        options.put(4, new Option("Get degree", this::getDegree));
+        options.put(6, new Option("Get adjacent edges", this::adjacentEdges));
+        options.put(8, new Option("Get edge cost", this::getEdgeCost));
+        options.put(9, new Option("Set edge cost", this::setEdgeCost));
+        options.put(10, new Option("Add edge", this::addEdge));
+        options.put(11, new Option("Remove edge", this::removeEdge));
+        options.put(12, new Option("Add vertex", this::addVertex));
+        options.put(13, new Option("Remove vertex", this::removeVertex));
+        options.put(15, new Option("Get edges", this::getEdges));
+        options.put(16, new Option("Get connected components", this::getConnectedComponents));
+    }
 
+    private void getConnectedComponents()
+    {
+        print(controller.getConnectedComponents());
     }
 
 //    private void writeGraphToFile()
@@ -163,7 +163,7 @@ class ConsoleUI
         print(controller.getCost(vertex1, vertex2));
     }
 
-    private void inboundadjacentEdges()
+    private void adjacentEdges()
     {
         int vertex = getInt("Choose vertex: ");
         print(controller.getAdjacentEdges(vertex));

@@ -1,13 +1,9 @@
-package lab2;
+package undirectedGraph;
 
-import graphs.DirectedGraph;
+import graphs.OrderedVertexPair;
 import graphs.UndirectedGraph;
-import graphs.VertexPair;
-import graphs.utils.FileUtils;
-import graphs.utils.GraphUtils;
 
-import java.io.IOException;
-import java.util.StringJoiner;
+import java.util.*;
 
 class Controller
 {
@@ -82,13 +78,66 @@ class Controller
 
     public String getEdges()
     {
-        Iterable<VertexPair> edgeSet = undirectedGraph.parseEdges();
+        Iterable<OrderedVertexPair> edgeSet = undirectedGraph.parseEdges();
         StringJoiner stringJoiner = new StringJoiner(", ");
-        for (VertexPair edge : edgeSet)
+        for (OrderedVertexPair edge : edgeSet)
         {
             stringJoiner.add(String.format("%d - %d", edge.getVertex1(), edge.getVertex2()));
         }
         return stringJoiner.toString();
+    }
+
+    public String getConnectedComponents()
+    {
+        Map<Integer, Integer> components = new HashMap<>(undirectedGraph.getNumberOfVertices());
+        undirectedGraph.parseVertices().forEach((vertex) -> components.put(vertex, 0));
+
+        int componentIndex = 1;
+        for (Map.Entry<Integer, Integer> entry : components.entrySet())
+        {
+            if (entry.getValue() == 0)
+            {
+                depthFirstSearch(entry.getKey(), components, componentIndex);
+                componentIndex++;
+            }
+        }
+
+        Map<Integer, StringJoiner> connectedComponents = new HashMap<>(componentIndex - 1);
+        for (int i = 0; i < componentIndex; i++)
+        {
+            connectedComponents.put(i, new StringJoiner(" - "));
+        }
+
+        for (Map.Entry<Integer, Integer> entry : components.entrySet())
+        {
+            connectedComponents.get(entry.getValue()).add(Integer.toString(entry.getKey()));
+        }
+
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        for (StringJoiner component : connectedComponents.values())
+        {
+            stringJoiner.add(component.toString());
+        }
+        return stringJoiner.toString();
+    }
+
+    private void depthFirstSearch(int initialVertex, Map<Integer, Integer> components, int componentIndex)
+    {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(initialVertex);
+        components.put(initialVertex, componentIndex);
+        while (!stack.isEmpty())
+        {
+            int vertex = stack.pop();
+            for (int neighbour : undirectedGraph.parseAdjacentEdges(vertex))
+            {
+                if (components.get(neighbour) == 0)
+                {
+                    stack.push(neighbour);
+                    components.put(neighbour, componentIndex);
+                }
+            }
+        }
     }
 
 //    public String writeGraphToFile(String fileName)
@@ -102,4 +151,5 @@ class Controller
 //            return "File cannot be written to\n";
 //        }
 //    }
+
 }

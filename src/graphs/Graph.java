@@ -23,7 +23,7 @@ public interface Graph
 
     void removeEdge(int vertex1, int vertex2);
 
-    Iterable<VertexPair> parseEdges();
+    Iterable<? extends VertexPair> parseEdges();
 
     Graph copy();
 }

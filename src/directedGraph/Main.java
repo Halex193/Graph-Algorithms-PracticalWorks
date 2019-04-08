@@ -1,6 +1,6 @@
-package lab2;
+package directedGraph;
 
-import graphs.UndirectedGraph;
+import graphs.DirectedGraph;
 import graphs.utils.FileUtils;
 
 import java.io.FileNotFoundException;
@@ -11,16 +11,16 @@ class Main
 
     public static void main(String[] args)
     {
-        UndirectedGraph undirectedGraph;
+        DirectedGraph directedGraph;
         try
         {
-            undirectedGraph = FileUtils.createUndirectedGraphFromFile(fileName);
+            directedGraph = FileUtils.createDirectedGraphFromFile(fileName);
         } catch (FileNotFoundException e)
         {
             System.out.println(String.format("File \"%s\" was not found", fileName));
-            undirectedGraph = new UndirectedGraph();
+            directedGraph = new DirectedGraph();
         }
-        Controller controller = new Controller(undirectedGraph);
+        Controller controller = new Controller(directedGraph);
         ConsoleUI consoleUI = new ConsoleUI(controller);
         consoleUI.run();
     }

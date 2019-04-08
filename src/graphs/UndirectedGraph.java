@@ -254,7 +254,7 @@ public class UndirectedGraph implements Graph
      * @return An iterable of VertexPair objects
      */
     @Override
-    public Iterable<VertexPair> parseEdges()
+    public Iterable<OrderedVertexPair> parseEdges()
     {
         return Collections.unmodifiableSet(edges.keySet());
     }

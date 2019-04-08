@@ -47,6 +47,23 @@ public class FileUtils
 
     public static UndirectedGraph createUndirectedGraphFromFile(String fileName) throws FileNotFoundException
     {
-        return null;
+        File file = new File(fileName);
+        if (!file.exists())
+        {
+            throw new FileNotFoundException();
+        }
+        Scanner scanner = new Scanner(file);
+        int vertexNumber = scanner.nextInt();
+        int edgeNumber = scanner.nextInt();
+        UndirectedGraph undirectedGraph = new UndirectedGraph(vertexNumber, edgeNumber);
+        for (int i = 0; i < edgeNumber; i++)
+        {
+            int vertex1 = scanner.nextInt();
+            int vertex2 = scanner.nextInt();
+            int cost = scanner.nextInt();
+            undirectedGraph.addEdge(vertex1, vertex2, cost);
+        }
+        scanner.close();
+        return undirectedGraph;
     }
 }
