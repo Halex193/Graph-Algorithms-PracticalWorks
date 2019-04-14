@@ -42,7 +42,7 @@ class ConsoleUI
 
     private void getConnectedComponents()
     {
-        print(controller.getConnectedComponents());
+        print(controller.showConnectedComponents());
     }
 
 //    private void writeGraphToFile()

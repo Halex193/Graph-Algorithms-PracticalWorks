@@ -2,6 +2,7 @@ package undirectedGraph;
 
 import graphs.OrderedVertexPair;
 import graphs.UndirectedGraph;
+import graphs.algorithms.Traversal;
 
 import java.util.*;
 
@@ -87,69 +88,26 @@ class Controller
         return stringJoiner.toString();
     }
 
-    public String getConnectedComponents()
+    public String showConnectedComponents()
     {
-        Map<Integer, Integer> components = new HashMap<>(undirectedGraph.getNumberOfVertices());
-        undirectedGraph.parseVertices().forEach((vertex) -> components.put(vertex, 0));
-
-        int componentIndex = 1;
-        for (Map.Entry<Integer, Integer> entry : components.entrySet())
-        {
-            if (entry.getValue() == 0)
-            {
-                depthFirstSearch(entry.getKey(), components, componentIndex);
-                componentIndex++;
-            }
-        }
-
-        Map<Integer, StringJoiner> connectedComponents = new HashMap<>(componentIndex - 1);
-        for (int i = 0; i < componentIndex; i++)
-        {
-            connectedComponents.put(i, new StringJoiner(" - "));
-        }
-
-        for (Map.Entry<Integer, Integer> entry : components.entrySet())
-        {
-            connectedComponents.get(entry.getValue()).add(Integer.toString(entry.getKey()));
-        }
-
+        List<UndirectedGraph> connectedComponents = Traversal.getConnectedComponents(undirectedGraph);
         StringJoiner stringJoiner = new StringJoiner("\n");
-        for (StringJoiner component : connectedComponents.values())
+        for (int component = 0;component<connectedComponents.size();component++)
         {
-            stringJoiner.add(component.toString());
+            StringJoiner vertices = new StringJoiner(", ");
+            for (int vertex : connectedComponents.get(component).parseVertices())
+            {
+                vertices.add(Integer.toString(vertex));
+            }
+            stringJoiner.add("Connected component " + component + " vertices: " + vertices.toString());
+            StringJoiner edges = new StringJoiner(", ");
+            for (OrderedVertexPair orderedVertexPair : connectedComponents.get(component).parseEdges())
+            {
+                edges.add(orderedVertexPair.getVertex1() + " - " + orderedVertexPair.getVertex2());
+            }
+            stringJoiner.add("Connected component " + component + " edges: " + edges.toString());
         }
         return stringJoiner.toString();
     }
-
-    private void depthFirstSearch(int initialVertex, Map<Integer, Integer> components, int componentIndex)
-    {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(initialVertex);
-        components.put(initialVertex, componentIndex);
-        while (!stack.isEmpty())
-        {
-            int vertex = stack.pop();
-            for (int neighbour : undirectedGraph.parseAdjacentEdges(vertex))
-            {
-                if (components.get(neighbour) == 0)
-                {
-                    stack.push(neighbour);
-                    components.put(neighbour, componentIndex);
-                }
-            }
-        }
-    }
-
-//    public String writeGraphToFile(String fileName)
-//    {
-//        try
-//        {
-//            FileUtils.writeUndirctedGraphToFile(undirectedGraph, fileName);
-//            return "The graph was written to the file\n";
-//        } catch (IOException e)
-//        {
-//            return "File cannot be written to\n";
-//        }
-//    }
 
 }

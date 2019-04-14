@@ -3,6 +3,8 @@ package graphs.utils;
 import graphs.DirectedGraph;
 import graphs.UndirectedGraph;
 import graphs.VertexPair;
+import graphs.exceptions.CannotHaveLoopsException;
+import graphs.exceptions.EdgeAlreadyExistsException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -61,7 +63,13 @@ public class FileUtils
             int vertex1 = scanner.nextInt();
             int vertex2 = scanner.nextInt();
             int cost = scanner.nextInt();
-            undirectedGraph.addEdge(vertex1, vertex2, cost);
+            try
+            {
+                undirectedGraph.addEdge(vertex1, vertex2, cost);
+            } catch (CannotHaveLoopsException | EdgeAlreadyExistsException ignored)
+            {
+
+            }
         }
         scanner.close();
         return undirectedGraph;
