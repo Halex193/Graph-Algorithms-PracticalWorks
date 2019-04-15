@@ -2,10 +2,12 @@ package directedGraph;
 
 import graphs.DirectedGraph;
 import graphs.VertexPair;
+import graphs.algorithms.Traversal;
 import graphs.utils.FileUtils;
 import graphs.utils.GraphUtils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.StringJoiner;
 
 class Controller
@@ -131,5 +133,26 @@ class Controller
         {
             return "File cannot be written to\n";
         }
+    }
+
+    public String lowestCostWalk(int start, int target)
+    {
+        Traversal.DTOCostWalk result = Traversal.lowestCostWalk(directedGraph, start, target);
+        if (result == null)
+        {
+            return "The graph contains negative cycles";
+        }
+        List<Integer> walk = result.getWalk();
+        if (walk.isEmpty())
+        {
+            return "There is no walk from the starting vertex to the target vertex";
+        }
+
+        StringJoiner stringJoiner = new StringJoiner(" - ");
+        for (Integer edge : walk)
+        {
+            stringJoiner.add(edge.toString());
+        }
+        return String.format("The minimum cost is: %d\nThe walk is: %s", result.getCost(), stringJoiner.toString());
     }
 }

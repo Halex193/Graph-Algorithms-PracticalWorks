@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 class Main
 {
-    private static final String fileName = "data/graph1k.txt";
+    private static final String fileName = "data/graph.txt";
 
     public static void main(String[] args)
     {

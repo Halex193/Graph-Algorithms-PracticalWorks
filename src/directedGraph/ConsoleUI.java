@@ -40,7 +40,15 @@ class ConsoleUI
         options.put(15, new Option("Get edges", this::getEdges));
         options.put(16, new Option("List isolated vertices", this::isolatedVertices));
         options.put(17, new Option("Write graph to file", this::writeGraphToFile));
+        options.put(18, new Option("Find lowest cost walk", this::lowestCostWalk));
 
+    }
+
+    private void lowestCostWalk()
+    {
+        int start = getInt("Choose starting vertex: ");
+        int target = getInt("Choose target vertex: ");
+        print(controller.lowestCostWalk(start, target));
     }
 
     private void writeGraphToFile()
@@ -68,13 +76,14 @@ class ConsoleUI
             System.out.println("0. Exit");
             System.out.println("Your choice:");
 
-            int option = scanner.nextInt();
-            if (option == 0)
-            {
-                break;
-            }
+
             try
             {
+                int option = scanner.nextInt();
+                if (option == 0)
+                {
+                    break;
+                }
                 executeOption(option);
             } catch (EdgeAlreadyExistsException e)
             {
@@ -88,6 +97,10 @@ class ConsoleUI
             } catch (VertexDoesNotExistException e)
             {
                 System.out.println("The specified vertex does not exist!\n");
+            } catch (InputMismatchException e)
+            {
+                System.out.println("Please provide an integer!\n");
+                scanner.skip(".*");
             } catch (Exception e)
             {
                 e.printStackTrace();
