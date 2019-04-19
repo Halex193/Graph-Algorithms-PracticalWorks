@@ -2,8 +2,8 @@ package graphs.algorithms;
 
 import graphs.DirectedGraph;
 import graphs.UndirectedGraph;
-import graphs.VertexPair;
 import graphs.exceptions.EdgeAlreadyExistsException;
+import graphs.exceptions.VertexDoesNotExistException;
 
 import java.util.*;
 
@@ -128,8 +128,20 @@ public class Traversal
         }
     }
 
+    /**
+     * Finds the lowest cost walk from the startingVertex to the targetVertex in the directedGraph
+     * @return The lowest cost walk from the startingVertex to the targetVertex,
+     *          an empty walk if there is no walk between the two
+     *          or null if there are negative cost cycles in the graph
+     * @throws VertexDoesNotExistException if one of the given vertices is not in the graph
+     */
     public static DTOCostWalk lowestCostWalk(DirectedGraph directedGraph, int startVertex, int targetVertex)
     {
+        if (!directedGraph.existsVertex(startVertex) || !directedGraph.existsVertex(targetVertex))
+        {
+            throw new VertexDoesNotExistException();
+        }
+
         final int INFINITY = Integer.MAX_VALUE;
         int vertexNumber = directedGraph.getNumberOfVertices();
         Map<Integer, List<Status>> statusMatrix = new HashMap<>(vertexNumber);
@@ -197,7 +209,7 @@ public class Traversal
         }
         Status currentStatus;
         Integer currentVertex = targetVertex;
-        while (currentVertex!= null)
+        while (currentVertex != null)
         {
             walk.add(0, currentVertex);
             currentStatus = statusMatrix.get(currentVertex).get(level);
