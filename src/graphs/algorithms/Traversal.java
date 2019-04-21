@@ -179,31 +179,39 @@ public class Traversal
                 statusMatrix.get(vertex).add(minimum);
             }
         }
+
+        Status targetMinimum = new Status(INFINITY, null);
+        int targetLevel = 0;
         for (int vertex : directedGraph.parseVertices())
         {
-            List<Status> costsForVertex = statusMatrix.get(vertex);
-            if (costsForVertex.get(vertexNumber).getCost() < (costsForVertex.get(vertexNumber - 1).getCost()))
+            List<Status> vertexStatusList = statusMatrix.get(vertex);
+            Status minimum = new Status(INFINITY, null);
+            int level = 0;
+            for (int i = 0; i < vertexNumber; i++)
+            {
+                Status status = vertexStatusList.get(i);
+                if (status.getCost() < minimum.getCost())
+                {
+                    minimum = status;
+                    level = i;
+                }
+            }
+            if (vertexStatusList.get(vertexNumber).cost < minimum.getCost())
             {
                 return null;
             }
-        }
-
-        List<Status> targetVertexStatusList = statusMatrix.get(targetVertex);
-        Status minimum = new Status(INFINITY, null);
-        int level = 0;
-        for (int i = 0; i < vertexNumber; i++)
-        {
-            Status status = targetVertexStatusList.get(i);
-            if (status.getCost() < minimum.getCost())
+            if (vertex == targetVertex)
             {
-                minimum = status;
-                level = i;
+                targetMinimum.cost = minimum.getCost();
+                targetMinimum.parent = minimum.getParent();
+                targetLevel = level;
             }
         }
-        List<Integer> walk = new LinkedList<>();
-        DTOCostWalk result = new DTOCostWalk(minimum.getCost(), walk);
 
-        if (minimum.getCost() == INFINITY)
+        List<Integer> walk = new LinkedList<>();
+        DTOCostWalk result = new DTOCostWalk(targetMinimum.getCost(), walk);
+
+        if (targetMinimum.getCost() == INFINITY)
         {
             return result;
         }
@@ -212,9 +220,9 @@ public class Traversal
         while (currentVertex != null)
         {
             walk.add(0, currentVertex);
-            currentStatus = statusMatrix.get(currentVertex).get(level);
+            currentStatus = statusMatrix.get(currentVertex).get(targetLevel);
             currentVertex = currentStatus.getParent();
-            level--;
+            targetLevel--;
         }
         return result;
     }
