@@ -22,7 +22,7 @@ class ConsoleUI
 
     private void createOptionList()
     {
-        options = new HashMap<>(16);
+        options = new HashMap<>(18);
         options.put(1, new Option("Number of vertices", this::numberOfVertices));
         options.put(2, new Option("List vertices", this::listVertices));
         options.put(3, new Option("Check if edge exists", this::edgeExists));
