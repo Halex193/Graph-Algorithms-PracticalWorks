@@ -1,10 +1,5 @@
 package activities;
 
-import java.io.FileNotFoundException;
-
-import graphs.DirectedGraph;
-import graphs.utils.FileUtils;
-
 class Main
 {
     private static final String fileName = "data/activities.txt";

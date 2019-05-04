@@ -1,15 +1,7 @@
 package activities;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Scanner;
-
-import graphs.exceptions.EdgeAlreadyExistsException;
-import graphs.exceptions.EdgeDoesNotExistException;
-import graphs.exceptions.VertexAlreadyExistsException;
-import graphs.exceptions.VertexDoesNotExistException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class ConsoleUI
 {
@@ -22,7 +14,39 @@ class ConsoleUI
 
     public void run()
     {
-        //TODO call controller function and show results
+        Controller.DTOProject project = controller.createProject();
+        if (project == null)
+        {
+            System.out.println("The corresponding graph is not a DAG");
+            return;
+        }
+        List<Activity> activities = project.activityList;
+        List<String> topologicalOrder = activities.stream()
+                                                  .map(activity -> String.valueOf(activity.vertex))
+                                                  .collect(Collectors.toList());
+        System.out.printf("A topological order is: %s%n", String.join(", ", topologicalOrder));
+
+        String tableFormat = "| %-8s | %-8d | %-5d | %-3d | %-5d | %-3d | %-8s |%n";
+
+        System.out.format("+----------+----------+-------------+-------------+----------+%n");
+        System.out.format("| Activity | Duration |   Minimum   |   Maximum   | Critical |%n");
+        System.out.format("|          |          | Start | End | Start | End |          |%n");
+        System.out.format("+----------+----------+-------+-----+-------+-----+----------+%n");
+        for (Activity activity : activities)
+        {
+            System.out.format(
+                    tableFormat,
+                    activity.vertex,
+                    activity.duration,
+                    activity.minStartTime,
+                    activity.minEndTime,
+                    activity.maxStartTime,
+                    activity.maxEndTime,
+                    activity.critical ? "X" : ""
+            );
+        }
+        System.out.format("+----------+----------+-------+-----+-------+-----+----------+%n");
+        System.out.printf("Project completion time: %s%n", project.minEndTime);
     }
 
 }
