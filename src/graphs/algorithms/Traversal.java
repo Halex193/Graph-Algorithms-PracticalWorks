@@ -120,7 +120,7 @@ public class Traversal
             {
                 if (lastEdge == null)
                 {
-                    lastEdge = getLastEdge(edgeList, foundEdges);
+                    lastEdge = orderEdges(edgeList, foundEdges);
                 }
                 if (edge.equals(lastEdge))
                 {
@@ -149,7 +149,7 @@ public class Traversal
         return null;
     }
 
-    private static OrderedVertexPair getLastEdge(
+    private static OrderedVertexPair orderEdges(
             List<OrderedVertexPair> edgeList,
             Set<OrderedVertexPair> foundEdges
     )
