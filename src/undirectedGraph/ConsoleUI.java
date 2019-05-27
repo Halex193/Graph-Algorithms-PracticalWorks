@@ -56,7 +56,7 @@ class ConsoleUI
         List<Integer> vertices = dtoHamiltonian.getCycle();
         int cost = dtoHamiltonian.getCost();
         String cycle = vertices.stream().map(String::valueOf).collect(Collectors.joining(" - "));
-        print(cycle);
+        print("The Hamiltonian cycle of low cost is: " + cycle);
         print("The cost of the cycle is " + cost);
     }
 

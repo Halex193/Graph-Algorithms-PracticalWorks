@@ -24,7 +24,12 @@ public class Traversal
         {
             if (entry.getValue() == 0)
             {
-                depthFirstSearchAccessible(undirectedGraph, entry.getKey(), components, componentIndex);
+                depthFirstSearchAccessible(
+                        undirectedGraph,
+                        entry.getKey(),
+                        components,
+                        componentIndex
+                );
                 componentIndex++;
             }
         }
@@ -44,8 +49,13 @@ public class Traversal
             {
                 try
                 {
-                    connectedComponents.get(entry.getValue()).addEdge(entry.getKey(), vertex2, undirectedGraph.getCost(entry.getKey(), vertex2));
-                } catch (EdgeAlreadyExistsException ignored)
+                    connectedComponents.get(entry.getValue())
+                                       .addEdge(entry.getKey(),
+                                                vertex2,
+                                                undirectedGraph.getCost(entry.getKey(), vertex2)
+                                       );
+                }
+                catch (EdgeAlreadyExistsException ignored)
                 {
 
                 }
@@ -57,7 +67,12 @@ public class Traversal
     /**
      * Marks all the vertices that are connected to the initialVertex with the componentIndex in the components map
      */
-    private static void depthFirstSearchAccessible(UndirectedGraph undirectedGraph, int initialVertex, Map<Integer, Integer> components, int componentIndex)
+    private static void depthFirstSearchAccessible(
+            UndirectedGraph undirectedGraph,
+            int initialVertex,
+            Map<Integer, Integer> components,
+            int componentIndex
+    )
     {
         Stack<Integer> stack = new Stack<>();
         stack.push(initialVertex);
@@ -105,63 +120,7 @@ public class Traversal
             {
                 if (lastEdge == null)
                 {
-
-                    Set<OrderedVertexPair> edgeSet = new HashSet<>(foundEdges);
-                    OrderedVertexPair first = edgeSet.iterator().next();
-                    edgeList.add(first);
-                    edgeSet.remove(first);
-                    List<OrderedVertexPair> neighbourEdges = edgeSet.stream()
-                                                                       .filter((foundEdge) -> commonVertex(
-                                                                               foundEdge,
-                                                                               edgeList.get(edgeList.size() - 1)
-                                                                       ) != null)
-                                                                       .collect(Collectors.toList());
-                    while (!neighbourEdges.isEmpty())
-                    {
-                        edgeList.add(neighbourEdges.get(0));
-                        edgeSet.remove(neighbourEdges.get(0));
-
-                        neighbourEdges = edgeSet.stream()
-                                                   .filter((foundEdge) -> commonVertex(
-                                                           foundEdge,
-                                                           edgeList.get(edgeList.size() - 1)
-                                                   ) != null)
-                                                   .collect(Collectors.toList());
-
-                    }
-
-                    neighbourEdges = edgeSet.stream()
-                                               .filter((foundEdge) -> commonVertex(
-                                                       foundEdge,
-                                                       edgeList.get(0)
-                                               ) != null)
-                                               .collect(Collectors.toList());
-
-                    while (!neighbourEdges.isEmpty())
-                    {
-                        edgeList.add(0, neighbourEdges.get(0));
-                        edgeSet.remove(neighbourEdges.get(0));
-
-                        neighbourEdges = edgeSet.stream()
-                                                   .filter((foundEdge) -> commonVertex(
-                                                           foundEdge,
-                                                           edgeList.get(0)
-                                                   ) != null)
-                                                   .collect(Collectors.toList());
-
-                    }
-
-                    int p1 = edgeList.size() - 1;
-                    int p2 = 0;
-                    int vertex1 = getUncommonVertex(
-                            edgeList.get(p1),
-                            edgeList.get(p1 - 1)
-                    );
-                    int vertex2 = getUncommonVertex(
-                            edgeList.get(p2),
-                            edgeList.get(p2 + 1)
-                    );
-                    lastEdge = new OrderedVertexPair(vertex1, vertex2);
+                    lastEdge = getLastEdge(edgeList, foundEdges);
                 }
                 if (edge.equals(lastEdge))
                 {
@@ -188,6 +147,69 @@ public class Traversal
             return cycle;
         }
         return null;
+    }
+
+    private static OrderedVertexPair getLastEdge(
+            List<OrderedVertexPair> edgeList,
+            Set<OrderedVertexPair> foundEdges
+    )
+    {
+        Set<OrderedVertexPair> edgeSet = new HashSet<>(foundEdges);
+        OrderedVertexPair first = edgeSet.iterator().next();
+        edgeList.add(first);
+        edgeSet.remove(first);
+        List<OrderedVertexPair> neighbourEdges = edgeSet.stream()
+                                                        .filter((foundEdge) -> commonVertex(
+                                                                foundEdge,
+                                                                edgeList.get(edgeList.size() - 1)
+                                                        ) != null)
+                                                        .collect(Collectors.toList());
+        while (!neighbourEdges.isEmpty())
+        {
+            edgeList.add(neighbourEdges.get(0));
+            edgeSet.remove(neighbourEdges.get(0));
+
+            neighbourEdges = edgeSet.stream()
+                                    .filter((foundEdge) -> commonVertex(
+                                            foundEdge,
+                                            edgeList.get(edgeList.size() - 1)
+                                    ) != null)
+                                    .collect(Collectors.toList());
+
+        }
+
+        neighbourEdges = edgeSet.stream()
+                                .filter((foundEdge) -> commonVertex(
+                                        foundEdge,
+                                        edgeList.get(0)
+                                ) != null)
+                                .collect(Collectors.toList());
+
+        while (!neighbourEdges.isEmpty())
+        {
+            edgeList.add(0, neighbourEdges.get(0));
+            edgeSet.remove(neighbourEdges.get(0));
+
+            neighbourEdges = edgeSet.stream()
+                                    .filter((foundEdge) -> commonVertex(
+                                            foundEdge,
+                                            edgeList.get(0)
+                                    ) != null)
+                                    .collect(Collectors.toList());
+
+        }
+
+        int p1 = edgeList.size() - 1;
+        int p2 = 0;
+        int vertex1 = getUncommonVertex(
+                edgeList.get(p1),
+                edgeList.get(p1 - 1)
+        );
+        int vertex2 = getUncommonVertex(
+                edgeList.get(p2),
+                edgeList.get(p2 + 1)
+        );
+        return new OrderedVertexPair(vertex1, vertex2);
     }
 
     private static int getUncommonVertex(OrderedVertexPair edge1, OrderedVertexPair edge2)
@@ -294,12 +316,17 @@ public class Traversal
 
     /**
      * Finds the lowest cost walk from the startingVertex to the targetVertex in the directedGraph
+     *
      * @return The lowest cost walk from the startingVertex to the targetVertex,
-     *          an empty walk if there is no walk between the two
-     *          or null if there are negative cost cycles in the graph
+     * an empty walk if there is no walk between the two
+     * or null if there are negative cost cycles in the graph
      * @throws VertexDoesNotExistException if one of the given vertices is not in the graph
      */
-    public static DTOCostWalk lowestCostWalk(DirectedGraph directedGraph, int startVertex, int targetVertex)
+    public static DTOCostWalk lowestCostWalk(
+            DirectedGraph directedGraph,
+            int startVertex,
+            int targetVertex
+    )
     {
         if (!directedGraph.existsVertex(startVertex) || !directedGraph.existsVertex(targetVertex))
         {
