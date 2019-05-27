@@ -1,11 +1,13 @@
 package graphs.algorithms;
 
 import graphs.DirectedGraph;
+import graphs.OrderedVertexPair;
 import graphs.UndirectedGraph;
 import graphs.exceptions.EdgeAlreadyExistsException;
 import graphs.exceptions.VertexDoesNotExistException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Traversal
 {
@@ -72,6 +74,168 @@ public class Traversal
                 }
             }
         }
+    }
+
+    public static List<Integer> lowHamiltonian(UndirectedGraph undirectedGraph)
+    {
+        Iterable<OrderedVertexPair> edges = undirectedGraph.parseEdges();
+        List<OrderedVertexPair> orderedEdges = new ArrayList<>(undirectedGraph.getNumberOfEdges());
+        edges.forEach(orderedEdges::add);
+        orderedEdges.sort(Comparator.comparingInt((OrderedVertexPair edge) -> undirectedGraph.getCost(
+                edge.getVertex1(),
+                edge.getVertex2()
+        )));
+
+        int numberOfVertices = undirectedGraph.getNumberOfVertices();
+        List<OrderedVertexPair> edgeList = new LinkedList<>();
+        Set<OrderedVertexPair> foundEdges = new HashSet<>(numberOfVertices);
+        Iterator<OrderedVertexPair> iterator = orderedEdges.iterator();
+        Map<Integer, Integer> parents = new HashMap<>(numberOfVertices);
+        Map<Integer, Integer> componentSize = new HashMap<>(numberOfVertices);
+        for (Integer vertex : undirectedGraph.parseVertices())
+        {
+            parents.put(vertex, null);
+            componentSize.put(vertex, 1);
+        }
+        OrderedVertexPair lastEdge = null;
+        while (foundEdges.size() != numberOfVertices && iterator.hasNext())
+        {
+            OrderedVertexPair edge = iterator.next();
+            if (foundEdges.size() == numberOfVertices - 1)
+            {
+                if (lastEdge == null)
+                {
+
+                    Set<OrderedVertexPair> edgeSet = new HashSet<>(foundEdges);
+                    OrderedVertexPair first = edgeSet.iterator().next();
+                    edgeList.add(first);
+                    edgeSet.remove(first);
+                    List<OrderedVertexPair> neighbourEdges = edgeSet.stream()
+                                                                       .filter((foundEdge) -> commonVertex(
+                                                                               foundEdge,
+                                                                               edgeList.get(edgeList.size() - 1)
+                                                                       ) != null)
+                                                                       .collect(Collectors.toList());
+                    while (!neighbourEdges.isEmpty())
+                    {
+                        edgeList.add(neighbourEdges.get(0));
+                        edgeSet.remove(neighbourEdges.get(0));
+
+                        neighbourEdges = edgeSet.stream()
+                                                   .filter((foundEdge) -> commonVertex(
+                                                           foundEdge,
+                                                           edgeList.get(edgeList.size() - 1)
+                                                   ) != null)
+                                                   .collect(Collectors.toList());
+
+                    }
+
+                    neighbourEdges = edgeSet.stream()
+                                               .filter((foundEdge) -> commonVertex(
+                                                       foundEdge,
+                                                       edgeList.get(0)
+                                               ) != null)
+                                               .collect(Collectors.toList());
+
+                    while (!neighbourEdges.isEmpty())
+                    {
+                        edgeList.add(0, neighbourEdges.get(0));
+                        edgeSet.remove(neighbourEdges.get(0));
+
+                        neighbourEdges = edgeSet.stream()
+                                                   .filter((foundEdge) -> commonVertex(
+                                                           foundEdge,
+                                                           edgeList.get(0)
+                                                   ) != null)
+                                                   .collect(Collectors.toList());
+
+                    }
+
+                    int p1 = edgeList.size() - 1;
+                    int p2 = 0;
+                    int vertex1 = getUncommonVertex(
+                            edgeList.get(p1),
+                            edgeList.get(p1 - 1)
+                    );
+                    int vertex2 = getUncommonVertex(
+                            edgeList.get(p2),
+                            edgeList.get(p2 + 1)
+                    );
+                    lastEdge = new OrderedVertexPair(vertex1, vertex2);
+                }
+                if (edge.equals(lastEdge))
+                {
+                    foundEdges.add(edge);
+                    edgeList.add(edge);
+                }
+            }
+            else if (linkHamiltonian(edge, parents, componentSize))
+            {
+                foundEdges.add(edge);
+            }
+        }
+        if (foundEdges.size() == numberOfVertices)
+        {
+            List<Integer> cycle = new ArrayList<>(numberOfVertices);
+            int firstVertex = getUncommonVertex(edgeList.get(0), edgeList.get(1));
+            cycle.add(firstVertex);
+            cycle.add(commonVertex(edgeList.get(1), edgeList.get(0)));
+            for (int i = 1; i < edgeList.size(); i++)
+            {
+                cycle.add(getUncommonVertex(edgeList.get(i), edgeList.get(i - 1)));
+            }
+
+            return cycle;
+        }
+        return null;
+    }
+
+    private static int getUncommonVertex(OrderedVertexPair edge1, OrderedVertexPair edge2)
+    {
+        if (!edge1.getVertex1().equals(commonVertex(edge1, edge2)))
+        {
+            return edge1.getVertex1();
+        }
+        return edge1.getVertex2();
+    }
+
+    private static Integer commonVertex(OrderedVertexPair edge1, OrderedVertexPair edge2)
+    {
+        if (edge1.getVertex1().equals(edge2.getVertex1()) ||
+                edge1.getVertex1().equals(edge2.getVertex2()))
+        {
+            return edge1.getVertex1();
+        }
+        if (edge1.getVertex2().equals(edge2.getVertex1()) ||
+                edge1.getVertex2().equals(edge2.getVertex2()))
+        {
+            return edge1.getVertex2();
+        }
+        return null;
+    }
+
+    private static boolean linkHamiltonian(
+            OrderedVertexPair
+                    edge, Map<Integer, Integer> parents, Map<Integer, Integer> componentSize
+    )
+    {
+        int parent1 = edge.getVertex1();
+        int parent2 = edge.getVertex2();
+        while (parents.get(parent1) != null)
+        {
+            parent1 = parents.get(parent1);
+        }
+        while (parents.get(parent2) != null)
+        {
+            parent2 = parents.get(parent2);
+        }
+        if (parent1 == parent2)
+        {
+            return false;
+        }
+        parents.put(parent1, parent2);
+        componentSize.put(parent2, componentSize.get(parent1) + componentSize.get(parent2));
+        return true;
     }
 
     private static class Status

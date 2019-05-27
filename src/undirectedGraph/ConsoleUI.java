@@ -1,5 +1,6 @@
 package undirectedGraph;
 
+import graphs.algorithms.Traversal;
 import graphs.exceptions.EdgeAlreadyExistsException;
 import graphs.exceptions.EdgeDoesNotExistException;
 import graphs.exceptions.VertexAlreadyExistsException;
@@ -46,14 +47,17 @@ class ConsoleUI
 
     private void lowHamiltonian()
     {
-        List<Integer> vertices = controller.lowHamiltonian();
-        if (vertices == null)
+        Controller.DTOHamiltonian dtoHamiltonian = controller.lowHamiltonian();
+        if (dtoHamiltonian == null)
         {
             print("The heuristic did not find any Hamiltonian cycle of low cost");
             return;
         }
+        List<Integer> vertices = dtoHamiltonian.getCycle();
+        int cost = dtoHamiltonian.getCost();
         String cycle = vertices.stream().map(String::valueOf).collect(Collectors.joining(" - "));
         print(cycle);
+        print("The cost of the cycle is " + cost);
     }
 
     private void getConnectedComponents()
@@ -71,6 +75,11 @@ class ConsoleUI
 
     public void run()
     {
+        if(true)
+        {
+            lowHamiltonian();
+            return;
+        }
         while (true)
         {
             clearConsole();

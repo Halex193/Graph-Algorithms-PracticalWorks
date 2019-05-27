@@ -38,4 +38,13 @@ public class VertexPair
     {
         return Objects.hash(vertex1, vertex2);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Edge{ " +
+                vertex1 +
+                " - " + vertex2 +
+                " }";
+    }
 }
