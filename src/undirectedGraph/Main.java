@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 class Main
 {
-    private static final String fileName = "data/undirectedGraph.txt";
+    private static final String fileName = "data/hamiltonian.txt";
 
     public static void main(String[] args)
     {

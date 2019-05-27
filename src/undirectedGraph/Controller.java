@@ -5,6 +5,7 @@ import graphs.UndirectedGraph;
 import graphs.algorithms.Traversal;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 class Controller
 {
@@ -92,7 +93,7 @@ class Controller
     {
         List<UndirectedGraph> connectedComponents = Traversal.getConnectedComponents(undirectedGraph);
         StringJoiner stringJoiner = new StringJoiner("\n");
-        for (int component = 0;component<connectedComponents.size();component++)
+        for (int component = 0; component < connectedComponents.size(); component++)
         {
             StringJoiner vertices = new StringJoiner(", ");
             for (int vertex : connectedComponents.get(component).parseVertices())
@@ -108,6 +109,102 @@ class Controller
             stringJoiner.add("Connected component " + component + " edges: " + edges.toString());
         }
         return stringJoiner.toString();
+    }
+
+    public List<Integer> lowHamiltonian()
+    {
+        Iterable<OrderedVertexPair> edges = undirectedGraph.parseEdges();
+        List<OrderedVertexPair> orderedEdges = new ArrayList<>(undirectedGraph.getNumberOfEdges());
+        edges.forEach(orderedEdges::add);
+        orderedEdges.sort(Comparator.comparingInt((OrderedVertexPair edge) -> undirectedGraph.getCost(edge.getVertex1(), edge.getVertex2())));
+
+        int numberOfVertices = undirectedGraph.getNumberOfVertices();
+        List<OrderedVertexPair> foundEdges = new ArrayList<>(numberOfVertices);
+        Iterator<OrderedVertexPair> iterator = orderedEdges.iterator();
+        Map<Integer, Integer> parents = new HashMap<>(numberOfVertices);
+        Map<Integer, Integer> componentSize = new HashMap<>(numberOfVertices);
+        for (Integer vertex : undirectedGraph.parseVertices())
+        {
+            parents.put(vertex, null);
+            componentSize.put(vertex, 1);
+        }
+        while (foundEdges.size() != numberOfVertices && iterator.hasNext())
+        {
+            OrderedVertexPair edge = iterator.next();
+            if (linkHamiltonian(edge, parents, componentSize))
+            {
+                foundEdges.add(edge);
+            }
+        }
+        if (foundEdges.size() == numberOfVertices)
+        {
+            List<Integer> cycle = new ArrayList<>(numberOfVertices);
+            Integer lastVertex = null;
+            int currentVertex = foundEdges.get(0).getVertex1();
+            cycle.add(currentVertex);
+            for (int i = 0; i < numberOfVertices; i++)
+            {
+                final int finalCurrentVertex = currentVertex;
+                List<Integer> adjacentEdges = foundEdges.stream()
+                        .filter((edge) -> edge.getVertex1() == finalCurrentVertex || edge.getVertex2() == finalCurrentVertex)
+                        .map((edge) ->
+                        {
+                            if (edge.getVertex1() == finalCurrentVertex)
+                            {
+                                return edge.getVertex2();
+                            }
+                            return edge.getVertex1();
+                        })
+                        .collect(Collectors.toList());
+                Integer firstNeighbour = adjacentEdges.get(0);
+                Integer secondNeighbour = adjacentEdges.get(1);
+                if (lastVertex == null)
+                {
+                    cycle.add(firstNeighbour);
+                    lastVertex = currentVertex;
+                    currentVertex = firstNeighbour;
+                }
+                else
+                {
+                    if (!firstNeighbour.equals(lastVertex))
+                    {
+                        cycle.add(firstNeighbour);
+                        lastVertex = currentVertex;
+                        currentVertex = firstNeighbour;
+                    }
+                    else
+                    {
+                        cycle.add(secondNeighbour);
+                        lastVertex = currentVertex;
+                        currentVertex = secondNeighbour;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean linkHamiltonian(OrderedVertexPair
+                                            edge, Map<Integer, Integer> parents, Map<Integer, Integer> componentSize)
+    {
+        //TODO Last edge should be adjacent to a boundary (5 -> 0, not 5 -> 1)
+        int parent1 = edge.getVertex1();
+        int parent2 = edge.getVertex2();
+        while (parents.get(parent1) != null)
+        {
+            parent1 = parents.get(parent1);
+        }
+        while (parents.get(parent2) != null)
+        {
+            parent2 = parents.get(parent2);
+        }
+        if (parent1 == parent2 && componentSize.get(parent1) != undirectedGraph.getNumberOfVertices())
+        {
+            return false;
+        }
+        parents.put(parent1, parent2);
+        componentSize.put(parent2, componentSize.get(parent1) + componentSize.get(parent2));
+        return true;
     }
 
 }

@@ -5,3 +5,5 @@
 [Lab3](http://www.cs.ubbcluj.ro/~rlupsa/edu/grafe/lab3.html) - Problem 4
 
 [Lab4](http://www.cs.ubbcluj.ro/~rlupsa/edu/grafe/lab4.html) - Problem 1
+
+[Lab5](http://www.cs.ubbcluj.ro/~rlupsa/edu/grafe/lab5.html) - Problem 9

@@ -7,8 +7,10 @@ import graphs.exceptions.VertexDoesNotExistException;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 class ConsoleUI
 {
@@ -24,7 +26,7 @@ class ConsoleUI
 
     private void createOptionList()
     {
-        options = new HashMap<>(16);
+        options = new HashMap<>(17);
         options.put(1, new Option("Number of vertices", this::numberOfVertices));
         options.put(2, new Option("List vertices", this::listVertices));
         options.put(3, new Option("Check if edge exists", this::edgeExists));
@@ -38,6 +40,20 @@ class ConsoleUI
         options.put(13, new Option("Remove vertex", this::removeVertex));
         options.put(15, new Option("Get edges", this::getEdges));
         options.put(16, new Option("Get connected components", this::getConnectedComponents));
+        options.put(17, new Option("Find a Hamiltonian cycle of low cost", this::lowHamiltonian));
+
+    }
+
+    private void lowHamiltonian()
+    {
+        List<Integer> vertices = controller.lowHamiltonian();
+        if (vertices == null)
+        {
+            print("The heuristic did not find any Hamiltonian cycle of low cost");
+            return;
+        }
+        String cycle = vertices.stream().map(String::valueOf).collect(Collectors.joining(" - "));
+        print(cycle);
     }
 
     private void getConnectedComponents()
